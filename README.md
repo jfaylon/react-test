@@ -30,10 +30,10 @@ http://localhost:8080/api
 
 ## Things to improve on
 
-Client-side testing
-
+- Client-side testing
 - React + **\_\_** depending on the framework to be used (redux, saga, context, etc.)
 - ENVs for configurable variables
 - constants file
 - Minimise duplicate code
 - Add improved validations
+- Further enhancements depending on the need of the project
