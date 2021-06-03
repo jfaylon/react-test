@@ -19,12 +19,12 @@ Open [http://localhost:8080](http://localhost:8080) with your browser to see the
 ## API
 
 ```
-https://localhost:8080/api
+http://localhost:8080/api
 ```
 
 ## Things to improve on
 
 Client-side testing
-React + **\_\_** depending on the framework to be used (redux, saga, context, etc.)
-ENVs for configurable variables
-constants file
+* React + **\_\_** depending on the framework to be used (redux, saga, context, etc.)
+* ENVs for configurable variables
+* constants file
