@@ -1,5 +1,5 @@
 import React from "react";
-
+import { withRouter } from "next/router";
 import ProductFormStyle from "./ProductForm.module.scss";
 
 export class ProductForm extends React.Component {
@@ -10,13 +10,14 @@ export class ProductForm extends React.Component {
       name: props.name || "",
       price: props.price || 0,
       description: props.description || "",
-      imageUrl: props.imageUrl || "",
+      image: props.image || "",
       tags: props.tags ? props.tags.join(",") : "",
       isEdit: props.isEdit || false,
       spiel: ""
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   async componentDidUpdate(prevProps) {
@@ -31,7 +32,7 @@ export class ProductForm extends React.Component {
           name: productData.name || "",
           price: productData.price || 0,
           description: productData.description || "",
-          imageUrl: productData.imageUrl || "",
+          image: productData.image || "",
           tags: productData.tags ? productData.tags.join(",") : "",
           isEdit: props.id ? true : false
         });
@@ -47,16 +48,15 @@ export class ProductForm extends React.Component {
   }
 
   handleSubmit = async e => {
-    const { id, name, price, description, imageUrl, tags } = this.state;
+    const { id, name, price, description, image, tags } = this.state;
     const body = {
       name,
       price,
       description,
-      imageUrl,
+      image,
       tags
     };
     const url = `/api/products/${id || ""}`;
-    console.log(url);
     const response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
@@ -73,7 +73,14 @@ export class ProductForm extends React.Component {
         spiel: "Fail"
       });
     }
+    this.props.router.replace(`/`, undefined);
+    window.location.href = "/";
   };
+
+  handleCancel() {
+    this.props.router.replace(`/`, undefined);
+    window.location.href = "/";
+  }
 
   render() {
     const {
@@ -81,7 +88,7 @@ export class ProductForm extends React.Component {
       name,
       price,
       description,
-      imageUrl,
+      image,
       tags,
       isEdit,
       spiel
@@ -89,7 +96,7 @@ export class ProductForm extends React.Component {
     return (
       <div>
         <h3>Product Form</h3>
-        <form className={ProductFormStyle["container"]}>
+        <div className={ProductFormStyle["container"]}>
           {id && (
             <>
               <label htmlFor="id">ID</label>
@@ -122,11 +129,11 @@ export class ProductForm extends React.Component {
             value={description}
             onChange={this.handleChange}
           />
-          <label htmlFor="imageUrl">Image URL</label>
+          <label htmlFor="image">Image URL</label>
           <input
             type="text"
-            name="imageUrl"
-            value={imageUrl}
+            name="image"
+            value={image}
             onChange={this.handleChange}
           />
           <label htmlFor="description">Tags (comma-separated)</label>
@@ -136,12 +143,14 @@ export class ProductForm extends React.Component {
             value={tags}
             onChange={this.handleChange}
           />
+          <button onClick={this.handleCancel}>Cancel</button>
           <button onClick={this.handleSubmit}>{isEdit ? "Edit" : "Add"}</button>
-        </form>
+        </div>
+
         {spiel}
       </div>
     );
   }
 }
 
-export default ProductForm;
+export default withRouter(ProductForm);

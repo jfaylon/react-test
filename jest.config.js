@@ -3,9 +3,7 @@ module.exports = {
     "src/client/**/*.{js,jsx,mjs}",
     "src/server/**/*.{js,jsx,mjs}"
   ],
-  setupFilesAfterEnv: [
-    "<rootDir>/config/jest/polyfills.js",
-  ],
+  setupFilesAfterEnv: ["<rootDir>/config/jest/polyfills.js"],
   coveragePathIgnorePatterns: [
     "/node_modules/",
     ".next",
