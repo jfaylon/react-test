@@ -36,3 +36,4 @@ Client-side testing
 - ENVs for configurable variables
 - constants file
 - Minimise duplicate code
+- Add improved validations
