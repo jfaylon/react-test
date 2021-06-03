@@ -19,6 +19,26 @@ export class ProductForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  async componentDidUpdate(prevProps) {
+    const { props } = this;
+    if (prevProps.id !== props.id) {
+      const response = await fetch(`/api/products/${props.id}`);
+      const product = await response.json();
+      if (product.data) {
+        const productData = product.data;
+        this.setState({
+          id: productData.id || "",
+          name: productData.name || "",
+          price: productData.price || 0,
+          description: productData.description || "",
+          imageUrl: productData.imageUrl || "",
+          tags: productData.tags ? productData.tags.join(",") : "",
+          isEdit: props.id ? true : false
+        });
+      }
+    }
+  }
+
   handleChange(event) {
     this.setState({
       ...this.state,
@@ -27,36 +47,37 @@ export class ProductForm extends React.Component {
   }
 
   handleSubmit = async e => {
-    const { id, name, price, description, imageUrl, tags, isEdit } = this.state;
-    if (!isEdit) {
-      const body = {
-        name,
-        price,
-        description,
-        imageUrl,
-        tags
-      };
-      const response = await fetch("/api/products", {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-      if (response.status >= 200 && response.status <= 299) {
-        this.setState({
-          spiel: "Success"
-        });
-      } else {
-        this.setState({
-          spiel: "Fail"
-        });
+    const { id, name, price, description, imageUrl, tags } = this.state;
+    const body = {
+      name,
+      price,
+      description,
+      imageUrl,
+      tags
+    };
+    const url = `/api/products/${id || ""}`;
+    console.log(url);
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json"
       }
+    });
+    if (response.status >= 200 && response.status <= 299) {
+      this.setState({
+        spiel: "Success"
+      });
+    } else {
+      this.setState({
+        spiel: "Fail"
+      });
     }
   };
 
   render() {
     const {
+      id,
       name,
       price,
       description,
@@ -69,6 +90,18 @@ export class ProductForm extends React.Component {
       <div>
         <h3>Product Form</h3>
         <form className={ProductFormStyle["container"]}>
+          {id && (
+            <>
+              <label htmlFor="id">ID</label>
+              <input
+                type="text"
+                name="id"
+                value={id}
+                readOnly
+                disabled="disabled"
+              />
+            </>
+          )}
           <label htmlFor="name">Name</label>
           <input
             type="text"

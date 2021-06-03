@@ -42,7 +42,7 @@ const getProduct = async (req, res) => {
 
 const editProduct = async (req, res) => {
   const { params, body } = req;
-  const validationErrors = ProductService.validateProduct(body);
+  const validationErrors = validateProduct(body);
   if (validationErrors.length > 0) {
     return res.status(400).json({
       errors: validationErrors

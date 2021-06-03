@@ -1,9 +1,23 @@
+import { useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import ProductForm from "../components/ProductForm";
+import ProductTable from "../components/ProductTable";
+import { useRouter } from "next/router";
 
 export default function Home() {
+  const router = useRouter();
+  const { id } = router.query;
+
+  useEffect(
+    () => {
+      if (!router.isReady) return;
+
+      console.log(id);
+    },
+    [router.isReady]
+  );
   return (
     <div className={styles.container}>
       <Head>
@@ -51,7 +65,8 @@ export default function Home() {
             </p>
           </a>
         </div>
-        <ProductForm />
+        <ProductForm id={id} isEdit={id ? true : false} />
+        <ProductTable />
       </main>
 
       <footer className={styles.footer}>
